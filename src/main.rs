@@ -8,6 +8,7 @@ fn main() {
     let config = Config::new(&args).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {err}");
         println!("Usage: ./minigrep <query> <filepath>");
+        println!("Set IGNORE_CASE environment variable for case insensitive searching");
         process::exit(1);
     });
 
