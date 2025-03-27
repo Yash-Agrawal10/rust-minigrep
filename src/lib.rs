@@ -7,13 +7,25 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Self, &'static str> {
-        if args.len() != 3 {
-            return Err("Incorrect number of arguments")
-        }
-        let query = args[1].clone();
-        let file_path = args[2].clone();
+    pub fn new(mut args: impl Iterator<Item = String>) -> Result<Self, &'static str> {
+        // Skip executable name
+        args.next();
+
+        // Process arguments
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Did not receive query"),
+        };
+
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Did not receive file path"),
+        };
+
+        // Process environment variables
         let ignore_case = env::var("IGNORE_CASE").is_ok();
+
+        // Return Config
         Ok(Self { query, file_path, ignore_case })
     }
 }
